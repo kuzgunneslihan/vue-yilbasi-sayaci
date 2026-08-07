@@ -72,6 +72,8 @@ onUnmounted(() => {
 
 <style scoped>
 .countdown-wrapper {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
@@ -92,16 +94,24 @@ onUnmounted(() => {
   align-items: center;
   background-color: #2c2c2c;
   padding: 1rem 1.5rem;
-
+  border-radius: 8px;
+  min-width: 75px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .number {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #0e8903; 
+  color: #0e8903;
 }
 
-
+.label {  
+  font-size: 0.85rem;
+  margin-top: 6px;
+  color: #f0f0ea;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
 </style>
 
