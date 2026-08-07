@@ -80,4 +80,28 @@ onUnmounted(() => {
   color: #000000;
 }
 
+.timer-box {
+  display: flex;
+  gap: 18px;
+  margin-top: 2rem;
+}
+
+.time-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #2c2c2c;
+  padding: 1rem 1.5rem;
+
+}
+
+.number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0e8903; 
+}
+
+
+
 </style>
+
