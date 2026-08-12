@@ -1,117 +1,132 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
+import Tc from './components/tc.vue'; 
 
-interface TimeLeft {
-  days: number;
-  hours: string | number;
-  minutes: string | number;
-  seconds: string | number;
-}
+const tarihListesi = ref([
+  { id: 1, baslik: '-Yılbaşına Kalan Süre-', tarih: '2026-12-31' }
+]);
 
-// Başlangıç değerleri
-const timeLeft = ref<TimeLeft>({ days: 0, hours: '00', minutes: '00', seconds: '00' });
-let timerId: ReturnType<typeof setInterval>;
-
-// Tek haneli sayılara başa sıfır ekleme 
-const padZero = (num: number) => num.toString().padStart(2, '0');
-
-const calculateTimeLeft = () => {
-  const now = new Date();
-  
-  // Bulunduğumuz yılın sonunu dinamik olarak alıyor.
-  const targetDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59).getTime(); 
-  const difference = targetDate - now.getTime();
-
-  if (difference > 0) {
-    timeLeft.value = {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: padZero(Math.floor((difference / (1000 * 60 * 60)) % 24)),
-      minutes: padZero(Math.floor((difference / 1000 / 60) % 60)),
-      seconds: padZero(Math.floor((difference / 1000) % 60))
-    };
-  } else {
-    clearInterval(timerId); // Süre bittiyse boşa çalışmasın
-    timeLeft.value = { days: 0, hours: '00', minutes: '00', seconds: '00' };
-  }
-};
+const girilenBaslik = ref('');
+const girilenTarih = ref('');
 
 onMounted(() => {
-  calculateTimeLeft(); 
-  timerId = setInterval(calculateTimeLeft, 1000); 
+  const kaydedilmisVeri = localStorage.getItem('benimTarihlerim');
+  if (kaydedilmisVeri) {
+    tarihListesi.value = JSON.parse(kaydedilmisVeri);
+  }
 });
 
-onUnmounted(() => {
-  if (timerId) clearInterval(timerId);
-});
+watch(tarihListesi, (yeniListe) => {
+  localStorage.setItem('benimTarihlerim', JSON.stringify(yeniListe));
+}, { deep: true });
+
+const listeyeEkle = () => {
+  if (girilenTarih.value === '') {
+    alert("Lütfen bir tarih seçin!");
+    return;
+  }
+
+  let baslikYazisi = girilenBaslik.value;
+  if (baslikYazisi === '') {
+    baslikYazisi = '- Yeni Tarihe Kalan -';
+  }
+
+  tarihListesi.value.push({
+    id: Date.now(),
+    baslik: baslikYazisi,
+    tarih: girilenTarih.value 
+  });
+
+  girilenBaslik.value = '';
+  girilenTarih.value = '';
+};
 </script>
-
 <template>
-  <div class="countdown-wrapper">
-    <h1>-Yılbaşına Kalan Süre-</h1>
+  <div class="ana-sayfa">
     
-    <div class="timer-box">
-      <div class="time-block">
-        <span class="number">{{ timeLeft.days }}</span>
-        <span class="label">Gün</span>
-      </div>
-      <div class="time-block">
-        <span class="number">{{ timeLeft.hours }}</span>
-        <span class="label">Saat</span>
-      </div>
-      <div class="time-block">
-        <span class="number">{{ timeLeft.minutes }}</span>
-        <span class="label">Dak</span>
-      </div>
-      <div class="time-block">
-        <span class="number">{{ timeLeft.seconds }}</span>
-        <span class="label">San</span>
-      </div>
+    <div class="form-alani">
+      <input 
+        type="text" 
+        v-model="girilenBaslik" 
+        class="kutu text-kutu"
+      />
+      <input 
+        type="date" 
+        v-model="girilenTarih" 
+        class="kutu tarih-kutu"
+      />
+      <button @click="listeyeEkle" class="ekle-butonu">Yeni Ekle</button>
     </div>
+
+    <hr class="cizgi" />
+
+    <div class="liste-alani">
+      <Tc 
+        v-for="item in tarihListesi" 
+        :key="item.id" 
+        :title="item.baslik" 
+        :targetDate="item.tarih" 
+      />
+    </div>
+
   </div>
 </template>
 
-<style scoped>
-.countdown-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
+<style>
+body {
+  margin: 0;
+  padding: 0;
   background-color: #fdf8f8;
-  color: #000000;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-.timer-box {
-  display: flex;
-  gap: 18px;
-  margin-top: 2rem;
-}
-
-.time-block {
+.ana-sayfa {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #2c2c2c;
-  padding: 1rem 1.5rem;
+  padding: 2rem 1rem;
+}
+
+.form-alani {
+  display: flex;
+  gap: 10px;
+  background: white;
+  padding: 1rem;
   border-radius: 8px;
-  min-width: 75px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
 }
 
-.number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #0e8903;
+.kutu {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.label {  
-  font-size: 0.85rem;
-  margin-top: 6px;
-  color: #f0f0ea;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.ekle-butonu {
+  padding: 0.5rem 1rem;
+  background-color: #0e8903;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
+.ekle-butonu:hover {
+  background-color: #0b6d02;
+}
+
+.cizgi {
+  width: 100%;
+  max-width: 600px;
+  border: none;
+  border-top: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+
+.liste-alani {
+  width: 100%;
+}
 </style>
-
