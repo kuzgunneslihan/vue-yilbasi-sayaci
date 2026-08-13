@@ -4,11 +4,25 @@ import Tc from './components/tc.vue';
 import FormAlani from './components/FormAlani.vue'; 
 
 const tarihListesi = ref([
-  { id: 1, baslik: '-Yılbaşına Kalan Süre-', tarih: '2026-12-31' }
+  { id: 1, baslik: '-Yılbaşına Kalan Süre-', tarih: '2026-12-31' },
+  { id: 2, baslik: '-Benim Doğum Günüme Kalan-', tarih: '2027-07-19' },
+  { id: 3, baslik: "-Taha'nın Doğum Günü-", tarih: '2026-12-07' },
+  { id: 4, baslik: '-Seneye Bugüne Kalan-', tarih: '2027-08-13' },
+  { id: 5, baslik: '-Okulların Açılması-', tarih: '2026-09-22' },
+  { id: 6, baslik: '-Zafer Bayramı-', tarih: '2026-08-30' },
+  { id: 7, baslik: '-Hackathon Başlangıcı-', tarih: '2026-09-15' },
+  { id: 8, baslik: '-Cumhuriyet Bayramı-', tarih: '2026-10-29' },
+  { id: 9, baslik: '-Cadılar Bayramı-', tarih: '2026-10-31' },
+  { id: 10, baslik: '-Sene Sonu Proje Teslimi-', tarih: '2027-01-15' },
+  { id: 11, baslik: '-Sevgililer Günü-', tarih: '2027-02-14' },
+  { id: 12, baslik: '-23 Nisan Ulusal Egemenlik-', tarih: '2027-04-23' },
+  { id: 13, baslik: '-1 Mayıs İşçi Bayramı-', tarih: '2027-05-01' },
+  { id: 14, baslik: '-19 Mayıs Gençlik ve Spor Bayramı-', tarih: '2027-05-19' },
+  { id: 15, baslik: '-Yaz Tatilinin Başlaması-', tarih: '2027-06-15' }
 ]);
 
 onMounted(() => {
-  const kaydedilmisVeri = localStorage.getItem('benimTarihlerim');
+  const kaydedilmisVeri = localStorage.getItem('benimTarihlerim2');
   if (kaydedilmisVeri) {
     tarihListesi.value = JSON.parse(kaydedilmisVeri);
   }
