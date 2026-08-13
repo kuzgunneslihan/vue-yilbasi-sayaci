@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue';
 import Tc from './components/tc.vue'; 
 import FormAlani from './components/FormAlani.vue'; 
+import BilgiKarti from './components/BilgiKarti.vue'; // Yeni component'i ekledik
 
 const tarihListesi = ref([
   { id: 1, baslik: '-Yılbaşına Kalan Süre-', tarih: '2026-12-31' },
@@ -29,7 +30,7 @@ onMounted(() => {
 });
 
 watch(tarihListesi, (yeniListe) => {
-  localStorage.setItem('benimTarihlerim', JSON.stringify(yeniListe));
+  localStorage.setItem('benimTarihlerim2', JSON.stringify(yeniListe));
 }, { deep: true });
 
 const yeniVeriyiListeyeEkle = (gelenVeri: { baslik: string; tarih: string }) => {
@@ -44,6 +45,11 @@ const yeniVeriyiListeyeEkle = (gelenVeri: { baslik: string; tarih: string }) => 
 <template>
   <div class="ana-sayfa">
     
+    <!-- 1. Bilgi Kartı -->
+    <BilgiKarti mesaj="Hedeflerine kalan süreleri buradan takip edebilir ve yeni tarihler ekleyebilirsin" />
+
+    <BilgiKarti mesaj="Unutma, her saniye seni hedeflerine bir adım daha yaklaştırıyor." />
+
     <FormAlani @yeni-tarih="yeniVeriyiListeyeEkle" />
 
     <hr class="cizgi" />
