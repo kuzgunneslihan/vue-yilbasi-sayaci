@@ -2,7 +2,7 @@
 import { ref, watch, onMounted } from 'vue';
 import Tc from './components/tc.vue'; 
 import FormAlani from './components/FormAlani.vue'; 
-import BilgiKarti from './components/BilgiKarti.vue'; // Yeni component'i ekledik
+import BilgiKarti from './components/BilgiKarti.vue';
 
 const tarihListesi = ref([
   { id: 1, baslik: '-Yılbaşına Kalan Süre-', tarih: '2026-12-31' },
@@ -45,9 +45,7 @@ const yeniVeriyiListeyeEkle = (gelenVeri: { baslik: string; tarih: string }) => 
 <template>
   <div class="ana-sayfa">
     
-    <!-- 1. Bilgi Kartı -->
-    <BilgiKarti mesaj="Hedeflerine kalan süreleri buradan takip edebilir ve yeni tarihler ekleyebilirsin" />
-
+    <BilgiKarti mesaj="Hedeflerine kalan süreleri buradan takip edebilir ve yeni tarihler ekleyebilirsin." />
     <BilgiKarti mesaj="Unutma, her saniye seni hedeflerine bir adım daha yaklaştırıyor." />
 
     <FormAlani @yeni-tarih="yeniVeriyiListeyeEkle" />
@@ -81,15 +79,48 @@ body {
   padding: 2rem 1rem;
 }
 
+/* Yeni koddaki grid genişliğine uyumlu max-width entegre edildi */
 .cizgi {
   width: 100%;
-  max-width: 600px;
+  max-width: 1100px;
   border: none;
   border-top: 1px solid #ddd;
   margin-bottom: 1rem;
 }
 
+/* Yeni koddaki responsive Grid ve Scroll özellikleri entegre edildi */
 .liste-alani {
   width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-height: 620px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+
+.liste-alani::-webkit-scrollbar {
+  width: 8px;
+}
+.liste-alani::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 8px;
+}
+
+@media (max-width: 1023px) {
+  .liste-alani {
+    grid-template-columns: repeat(2, 1fr);
+    max-height: 560px;
+  }
+}
+
+@media (max-width: 639px) {
+  .liste-alani {
+    grid-template-columns: 1fr;
+    max-height: 70vh;
+  }
 }
 </style>

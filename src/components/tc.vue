@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -22,7 +21,8 @@ const padZero = (num: number) => num.toString().padStart(2, '0');
 const calculateTimeLeft = () => {
   const now = new Date();
   
-  const target = new Date(props.targetDate).getTime(); 
+  const parseableDate = props.targetDate.includes('T') ? props.targetDate : `${props.targetDate}T00:00:00`;
+  const target = new Date(parseableDate).getTime(); 
   const difference = target - now.getTime();
 
   if (difference > 0) {
@@ -33,7 +33,7 @@ const calculateTimeLeft = () => {
       seconds: padZero(Math.floor((difference / 1000) % 60))
     };
   } else {
-    clearInterval(timerId); 
+    if (timerId) clearInterval(timerId); 
     timeLeft.value = { days: 0, hours: '00', minutes: '00', seconds: '00' };
   }
 };
@@ -79,16 +79,27 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0;
+  padding: 1.25rem 0.5rem;
   font-family: system-ui, -apple-system, sans-serif;
   background-color: transparent;
   color: #000000;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  margin: 0 0 0.25rem;
+  text-align: center;
 }
 
 .timer-box {
   display: flex;
-  gap: 18px;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(6px, 1.4vw, 14px);
+  margin-top: 0.75rem;
+  width: 100%;
 }
 
 .time-block {
@@ -96,23 +107,33 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   background-color: #2c2c2c;
-  padding: 1rem 1.5rem;
+  padding: clamp(0.5rem, 1.4vw, 0.85rem) clamp(0.5rem, 1.8vw, 0.9rem);
   border-radius: 8px;
-  min-width: 75px;
+  min-width: 54px;
+  flex: 1 1 54px;
+  max-width: 84px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
 }
 
 .number {
-  font-size: 2.5rem;
+  font-size: clamp(1.25rem, 2.6vw, 2.5rem);
   font-weight: 700;
   color: #0e8903;
+  line-height: 1.1;
 }
 
 .label {  
-  font-size: 0.85rem;
-  margin-top: 6px;
+  font-size: clamp(0.62rem, 1vw, 0.85rem);
+  margin-top: 4px;
   color: #f0f0ea;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+@media (max-width: 639px) {
+  .time-block {
+    max-width: 100px;
+  }
 }
 </style>
