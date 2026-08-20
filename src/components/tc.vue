@@ -12,7 +12,7 @@ interface TimeLeft {
   minutes: string | number;
   seconds: string | number;
 }
-
+defineEmits(['sil']);
 const timeLeft = ref<TimeLeft>({ days: 0, hours: '00', minutes: '00', seconds: '00' });
 let timerId: ReturnType<typeof setInterval>;
 
@@ -51,7 +51,7 @@ onUnmounted(() => {
 <template>
   <div class="countdown-wrapper">
     <h1>{{ title }}</h1>
-    
+    <button class="sil-btn" type="button" title="Sil" @click="$emit('sil')">✕</button>
     <div class="timer-box">
       <div class="time-block">
         <span class="number">{{ timeLeft.days }}</span>
@@ -74,6 +74,28 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #e53e3e;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sil-btn:hover {
+  background-color: #fed7d7;
+}
 .countdown-wrapper {
   display: flex;
   flex-direction: column;

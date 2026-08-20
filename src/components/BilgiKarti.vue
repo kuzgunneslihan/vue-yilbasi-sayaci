@@ -150,7 +150,7 @@ onUnmounted(() => {
   pointer-events: auto;
 }
 
-/* Açılan Popup penceresi */
+
 .bilgi-popup {
   position: relative;
   background: #ffffff;
